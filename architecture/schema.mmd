@@ -1,0 +1,69 @@
+erDiagram
+    departments ||--o{ employees : has
+    employees ||--o| users : has
+    employees ||--o{ payments : receives
+    payroll_runs ||--o{ payments : contains
+    users ||--o{ sessions : owns
+    users ||--o{ audit_log : performs
+    users ||--o{ uploads : owns
+    departments {
+        int id PK
+        string name
+        numeric budget
+    }
+    employees {
+        int id PK
+        int department_id FK
+        string name
+        string email
+        string ssn
+        numeric salary
+        date hire_date
+    }
+    users {
+        int id PK
+        int employee_id FK
+        string username UK
+        string password_hash
+        string role
+        string reset_token
+    }
+    sessions {
+        string token PK
+        string username
+        text data
+        int created
+    }
+    payroll_runs {
+        int id PK
+        string period
+        int created_by FK
+        string status
+    }
+    payments {
+        int id PK
+        int payroll_run_id FK
+        int employee_id FK
+        numeric amount
+        date paid_on
+    }
+    audit_log {
+        int id PK
+        string username
+        string action
+        text detail
+        int created_at
+    }
+    uploads {
+        int id PK
+        string filename
+        string path
+        string owner
+        int uploaded_at
+    }
+    api_keys {
+        int id PK
+        string service
+        string key_value
+        int created_at
+    }
