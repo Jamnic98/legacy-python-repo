@@ -13,12 +13,11 @@ purpose so the hackathon demo (scan -> review -> migrate -> rescan) runs fast.
 
 ## Layout
 
-- `run.py` — WSGI entry point
-- `web_handler.py`, `admin.py` — request handlers
-- `auth.py`, `session.py` — login and sessions
-- `db.py` — Postgres access
-- `reports.py`, `file_store.py`, `api_client.py`, `utils.py` — features
-- `config.py` — configuration (planted hardcoded secrets)
+- `config.py` — configuration (planted hardcoded secrets, debug flag)
+- `db.py` — Postgres access (SQLi)
+- `auth.py` — login + sessions (MD5, pickle, predictable/random tokens)
+- `app.py` — handlers and WSGI entry point (XSS, eval, shell, traversal, TLS, authz, debug)
+- `requirements.txt` — ancient pinned deps
 - `architecture/` — DB schema (`schema.mmd`, `schema.svg`) + `DIAGRAM_PROMPT.md`
 - `VULNERABILITIES.md` — answer key: every planted flaw with `file:line`
 

@@ -31,8 +31,7 @@ Suggested layout: departments top-left, employees center-left, users center,
 sessions top-right, payroll_runs bottom-center, payments bottom-right,
 audit_log / uploads / api_keys along the right edge.
 
-The diagram must match the SQL statements in db.py, auth.py, session.py and
-reports.py so a migration model can rebuild the database schema from the image
-alone.
+The diagram must match the SQL statements in db.py, auth.py and app.py so a
+migration model can rebuild the database schema from the image alone.
 
 ---
