@@ -2,8 +2,8 @@
 
 Give the prompt below to a diagram-capable model (e.g. mistral-large-4) to
 produce the schema image that Sentinel ingests during the migration stage.
-The checked-in `schema.mmd` (Mermaid `erDiagram`) and `schema.svg` describe the
-exact same schema so the image can be verified or regenerated textually.
+The checked-in `schema.mmd` (Mermaid `erDiagram`) is the textual source of the
+same schema, so the generated image can be verified or regenerated.
 
 ---
 
@@ -31,7 +31,7 @@ Suggested layout: departments top-left, employees center-left, users center,
 sessions top-right, payroll_runs bottom-center, payments bottom-right,
 audit_log / uploads / api_keys along the right edge.
 
-The diagram must match the SQL statements in db.py, auth.py and app.py so a
+The diagram must match the SQL statements in db.py and app.py so a
 migration model can rebuild the database schema from the image alone.
 
 ---

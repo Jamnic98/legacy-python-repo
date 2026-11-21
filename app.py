@@ -1,17 +1,43 @@
+import base64
 import cgi
-import logging
+import md5
 import os
+import pickle
 import subprocess
+import time
 import traceback
 
 import requests
-import yaml
 from wsgiref.simple_server import make_server
 
-from config import DEBUG, UPLOAD_DIR
 from db import query
 
-logger = logging.getLogger("legacy_hr")
+DEBUG = True
+UPLOAD_DIR = "/var/www/legacy-hr/uploads"
+
+
+def hash_password(password):
+    return md5.new(password).hexdigest()
+
+
+def check_login(username, password):
+    rows = query("SELECT * FROM users WHERE username = '%s'" % username)
+    if rows and rows[0]["password_hash"] == hash_password(password):
+        return rows[0]
+    return None
+
+
+def create_session(username):
+    token = md5.new(username + str(time.time())).hexdigest()
+    query("INSERT INTO sessions (token, username, data) VALUES ('%s', '%s', '')" % (token, username))
+    return token
+
+
+def load_session(token):
+    rows = query("SELECT data FROM sessions WHERE token = '%s'" % token)
+    if not rows or not rows[0]["data"]:
+        return None
+    return pickle.loads(base64.b64decode(rows[0]["data"]))
 
 
 def handle_request(environ):
@@ -27,17 +53,9 @@ def handle_admin(environ):
     return "<html><body><pre>%s</pre></body></html>" % result
 
 
-def load_uploaded_config(fileobj):
-    return yaml.load(fileobj.read())
-
-
 def payroll_report(department):
-    return query(
-        "SELECT e.name, p.amount FROM payments p "
-        "JOIN employees e ON p.employee_id = e.id "
-        "JOIN departments d ON e.department_id = d.id "
-        "WHERE d.name = '%s' ORDER BY p.paid_on DESC" % department
-    )
+    return query("SELECT e.name, p.amount FROM payments p JOIN employees e ON p.employee_id = e.id "
+                 "JOIN departments d ON e.department_id = d.id WHERE d.name = '%s'" % department)
 
 
 def convert_report(src_path, fmt):
@@ -52,15 +70,8 @@ def download(filename):
 
 
 def fetch_salary_bands(country):
-    resp = requests.get(
-        "https://internal-api.legacycorp.local/v1/salary-bands?country=%s" % country,
-        verify=False,
-    )
+    resp = requests.get("https://internal-api.legacycorp.local/v1/salary-bands?country=%s" % country, verify=False)
     return resp.json()
-
-
-def log_employee(emp):
-    logger.info("employee name=%s ssn=%s salary=%s" % (emp["name"], emp["ssn"], emp["salary"]))
 
 
 def app(environ, start_response):
