@@ -8,14 +8,15 @@
 
 ## What this is
 
-A tiny Python 2 HR/payroll portal fixture — 3 code files, ~59 lines — so the
-hackathon demo (scan -> review -> migrate -> rescan) runs fast.
+A tiny Python 2 HR/payroll portal fixture — 3 code files, ~45 lines, exactly
+4 planted vulnerabilities — so the hackathon demo (scan -> review -> migrate ->
+rescan) runs fast.
 
 ## Layout
 
-- `secrets.py` — exposed secret keys, imported by the other modules (planted CWE-798)
-- `db.py` — Postgres access, login, sessions (SQLi, MD5, pickle)
-- `app.py` — bare request handler importing both (XSS, eval, shell, traversal, TLS)
+- `secrets.py` — exposed secret keys, imported by the other modules (CWE-798)
+- `db.py` — Postgres access, sessions (SQLi, pickle)
+- `app.py` — bare request handler importing both (eval)
 - `architecture/` — DB schema (`schema.mmd`) + `DIAGRAM_PROMPT.md`
 - `VULNERABILITIES.md` — answer key: every planted flaw with `file:line`
 

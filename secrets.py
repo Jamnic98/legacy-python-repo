@@ -2,4 +2,3 @@ DB_CONN_STRING = "postgresql://hr_app:Pr0dDB!2011@db.internal.legacycorp.local:5
 AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
 AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 STRIPE_SECRET_KEY = "sk_test_NOT_A_REAL_KEY_xxxxxxxx"
-UPLOAD_DIR = "/var/www/legacy-hr/uploads"
